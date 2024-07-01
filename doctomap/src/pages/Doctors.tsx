@@ -1,21 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import {Profile} from '../Interface/Profile.tsx'
 
-interface Doctor {
-    id: number;
-    name: string;
-    specialty: string;
-    phone: string;
-    email: string;
-    address: string;
-    zip: string;
-    city: string;
-    url: string;
-    hopitalID: number;
-}
-interface Doctors {
-    doctors: Doctor[];
-}
 
 
 export default function Doctors() {
@@ -46,7 +32,7 @@ export default function Doctors() {
             <div className="max-w-sm mx-auto my-10">
                 <div className="bg-white shadow-lg rounded-lg overflow-hidden">
                     <ul className="divide-y divide-gray-200">
-                        {data.map((doctor: Doctor) => (
+                        {data.map((doctor: Profile) => (
                             <li className="p-3 flex justify-between items-center user-card" key={doctor.id}>
                                     <div className="flex items-center">
                                         <span className="ml-3 font-medium">{doctor.name}</span>

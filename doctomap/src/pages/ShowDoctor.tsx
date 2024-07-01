@@ -1,41 +1,30 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useParams } from "react-router-dom";
+import {Profile} from '../Interface/Profile.tsx'
 
-interface Doctor {
-    id: number;
-    name: string;
-    specialty: string;
-    phone: string;
-    email: string;
-    address: string;
-    zip: string;
-    city: string;
-    url: string;
-    hopitalID: number;
-}
 
 export default function ShowDoctor() {
-    const [doctor, setDoctor] = useState<Doctor[]>([]);
+    const [doctor, setDoctor] = useState<Profile[]>([]);
     const { id } = useParams<{ id: string }>();
-    const url = `http://localhost:3000/doctors?id=${id}`;
+
+    const getDoctor = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/doctors?id=${id}`);
+            const result = await response.json();
+            if (result.length > 0) {
+                setDoctor(result);
+            } else {
+                alert('Doctor not found');
+            }
+        } catch (error) {
+            alert('Echec du fetch');
+        }
+    };
 
     useEffect(() => {
-        const getDoctor = async () => {
-            try {
-                const response = await fetch(url);
-                const result = await response.json();
-                if (result.length > 0) {
-                    setDoctor(result);
-                } else {
-                    alert('Doctor not found');
-                }
-            } catch (error) {
-                alert('Echec du fetch');
-            }
-        };
         getDoctor();
-    }, [id]);
+    }, []);
 
     if (doctor.length === 0) {
         return <div>Loading...</div>;
@@ -73,7 +62,7 @@ export default function ShowDoctor() {
                         <p className="md:text-lg text-gray-500 text-base">{doctor[0].email}</p>
                         <div className="action">
                             <a href={`/doctors/edit/${doctor[0].id}`}><button className="action__btn update">Update</button></a>
-                            <button className="action__btn delete">Delete</button>
+                            <a href={`/doctors/delete/${doctor[0].id}`}><button className="action__btn delete">Delete</button></a>
                         </div>
                     </div>
                 </div>

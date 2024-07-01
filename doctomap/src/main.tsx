@@ -9,6 +9,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import DeleteDoctor from './pages/DeleteDoctor.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,10 +28,10 @@ const router = createBrowserRouter([
     path: "/doctors/edit/:id",
     element: <EditDoctor />,
   },
-  // {
-  //   path: "/doctors/delete",
-  //   element: <Home />,
-  // }
+  {
+    path: "/doctors/delete/:id",
+    element: <DeleteDoctor />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

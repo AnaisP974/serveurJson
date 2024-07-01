@@ -1,29 +1,18 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {Profile} from '../Interface/Profile.tsx'
 
-interface Doctor {
-    id: number;
-    name: string;
-    specialty: string;
-    phone: string;
-    email: string;
-    address: string;
-    zip: string;
-    city: string;
-    url: string;
-    hopitalID: number;
-}
 
 export default function EditDoctor() {
-    const [doctor, setDoctor] = useState<Doctor | null>(null);
+    const [doctor, setDoctor] = useState<Profile | null>(null);
     const { id } = useParams<{ id: string }>();
-    const url = `http://localhost:3000/doctors?id=${id}`;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getDoctor = async () => {
             try {
-                const response = await fetch(url);
+                const response = await fetch(`http://localhost:3000/doctors?id=${id}`);
                 const result = await response.json();
                 if (result.length > 0) {
                     setDoctor(result[0]);
@@ -38,12 +27,32 @@ export default function EditDoctor() {
     }, [id]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        console.log(e.target.name)
-        console.log(e.target.value)
         const { name, value } = e.target;
         if (doctor) {
             setDoctor({ ...doctor, [name]: value });
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (doctor) {
+            try {
+                const response = await fetch(`http://localhost:3000/doctors/${doctor.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(doctor)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update doctor');
+                }
+                alert('Doctor updated successfully');
+                navigate('/');
+            } catch (error) {
+                alert('Echec de la mise à jour');
+            }
         }
     };
 
@@ -60,7 +69,7 @@ export default function EditDoctor() {
                     <div className="bg-white p-8 rounded shadow-md max-w-md w-full mx-auto">
                         <h2 className="text-2xl font-semibold mb-4">{doctor.name}</h2>
 
-                        <form action="#" method="POST">
+                        <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">FullName</label>
@@ -114,7 +123,7 @@ export default function EditDoctor() {
                                 <div>
                                     <label htmlFor="zip" className="block text-sm font-medium text-gray-700">ZIP</label>
                                     <input
-                                        type="integer"
+                                        type="text"
                                         id="zip"
                                         name="zip"
                                         className="mt-1 p-2 w-full border rounded-md"
