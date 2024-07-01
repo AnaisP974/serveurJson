@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1{
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    padding: 50px 0;
+}
+.home{
+    display: flex;
+    justify-content: space-around;
+    
+}
+.home__figure{
+    margin: 50px;
+    border: 1px solid gray;
+    border-radius: 12px;
+    padding: 30px;
+    figcaption{
+        text-align: center;
+    }
+}
+.home__figure:hover{
+    border: 2px solid rgb(224, 192, 13);
+}
+.action{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.action__btn{
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: none;
+    color: antiquewhite;
+}
+.update{
+    background-color: green;
+}
+.delete{
+    background-color: red;
+}
